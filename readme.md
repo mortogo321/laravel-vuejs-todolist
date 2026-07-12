@@ -1,51 +1,47 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# Todo List (Laravel + Vue)
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+A task-management demo app: create categories, assign tasks ("jobs") to users, and manage everything through a role-gated admin panel.
 
-## About Laravel
+## What's inside
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+- Email/password authentication — register, login, password reset (Laravel's built-in auth scaffolding)
+- Personal task list — each user sees the jobs assigned to them and can edit their own
+- Task categories for organizing jobs
+- Admin panel, gated by a custom `role:admin` middleware, for managing categories, jobs, and users
+- File attachment download endpoint for tasks
+- A separate `roles` table (`admin`, `editor`, default `user`) decoupled from the users table
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech stack
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+- Laravel (PHP), Laravel Tinker
+- Vue, Vite, Bootstrap, dayjs, axios
+- MySQL (default database connection)
 
-## Learning Laravel
+## Quickstart
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+```
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+Set your database credentials in `.env` (defaults to MySQL, database `todo_list`), then:
 
-## Laravel Sponsors
+```bash
+php artisan migrate
+php artisan db:seed        # optional: seeds demo users, roles, and categories
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](http://patreon.com/taylorotwell):
+npm install
+npm run dev                # or `npm run build` for production assets
 
-- **[Vehikl](http://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Styde](https://styde.net)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
+php artisan serve
+```
 
-## Contributing
+Demo login after seeding: `admin@todolist.com` / `Password@01` (admin role).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+## Key routes
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+- `/home` — job list for the logged-in user
+- `/edit/{id}` — edit a job assigned to you
+- `/attache/{type}/{id}/{name}` — download a job's attached file
+- `/admin/category`, `/admin/job`, `/admin/user` — admin CRUD, requires the `admin` role
